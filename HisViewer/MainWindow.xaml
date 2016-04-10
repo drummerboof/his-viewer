@@ -6,7 +6,17 @@
         xmlns:local="clr-namespace:HisViewer"
         mc:Ignorable="d"
         Title="MainWindow" Height="585" Width="1024">
-    <Grid Margin="24, 24, 24, 72">
-        <Image Name="MainImage" Stretch="Uniform" Source="C:\Users\Boof\Documents\test.png" MinHeight="256"/>
+    <Grid Margin="0, 0, 0, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="72" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" Name="MainMenu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1,0,0">
+            <MenuItem Header="File">
+                <MenuItem x:Name="Open" Header="Open..." Click="HandleOpenClick" />
+            </MenuItem>
+        </Menu>
+        <Image Grid.Row="1" Name="MainImage" Stretch="Uniform" MinHeight="256"/>
     </Grid>
 </Window>
