@@ -43,12 +43,11 @@ namespace HisViewer
             if (openFileDialog.ShowDialog() == true)
             {
                 FileInfo info = new FileInfo(openFileDialog.FileName);
-                ImageParserInterface parser = new HISImageParser();
 
                 try
                 {
                     MainImageBorder.Visibility = Visibility.Visible;
-                    MainImage.Source = parser.parseImageFile(info);
+                    MainImage.Source = Parser.parseImageFile(info);
                     OriginalSource = MainImage.Source.Clone();
                     Title = string.Format("His Viewer: {0}", info.Name);
                     FileName.Text = info.FullName;
