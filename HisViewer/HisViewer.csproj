@@ -67,6 +67,7 @@
     <Compile Include="ContrastImageAdjustment.cs" />
     <Compile Include="HISImageParser.cs" />
     <Compile Include="ImageAdjustmentInterface.cs" />
+    <Compile Include="ImageAdjustments.cs" />
     <Compile Include="ImageParserInterface.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

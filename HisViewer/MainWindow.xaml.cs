@@ -1,20 +1,11 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HisViewer
 {
@@ -23,29 +14,44 @@ namespace HisViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        ImageAdjustmentInterface ContrastAdjustment = new ContrastImageAdjustment();
-        ImageSource OriginalSource;
+        private ImageSource OriginalSource;
+
+        private readonly BackgroundWorker AdjustmentsWorker = new BackgroundWorker();
+
+        private ImageParserInterface Parser = new HISImageParser();
+
+        private ImageAdjustments Adjustments = new ImageAdjustments();
 
         public MainWindow()
         {
             InitializeComponent();
+            Adjustments.Register(ImageAdjustments.CONTRAST, new ContrastImageAdjustment());
+            AdjustmentsWorker.DoWork += HandleAdjustmentsWorkerDoWork;
+        }
+
+        private void HandleAdjustmentsWorkerDoWork(object sender, DoWorkEventArgs e)
+        {
+            List<object> args = (List<object>)e.Argument;
+            Dispatcher.Invoke(() => MainImage.Source = Adjustments.Get((string)args[0]).apply((BitmapSource)OriginalSource, (double)args[1]));
         }
 
         private void HandleOpenClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "HIS files (*.his)|*.his;";
+
             if (openFileDialog.ShowDialog() == true)
             {
-                Debug.WriteLine(openFileDialog.FileName);
                 FileInfo info = new FileInfo(openFileDialog.FileName);
                 ImageParserInterface parser = new HISImageParser();
 
                 try
                 {
+                    MainImageBorder.Visibility = Visibility.Visible;
                     MainImage.Source = parser.parseImageFile(info);
                     OriginalSource = MainImage.Source.Clone();
-                    Title = String.Format("His Viewer: {0}", info.Name);
+                    Title = string.Format("His Viewer: {0}", info.Name);
+                    FileName.Text = info.FullName;
                 }
                 catch (Exception ex)
                 {
@@ -56,12 +62,11 @@ namespace HisViewer
 
         private void HandleContrastChange(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (OriginalSource == null)
+            List<object> arguments = new List<object>() { ImageAdjustments.CONTRAST, e.NewValue };
+            if (OriginalSource != null && !AdjustmentsWorker.IsBusy)
             {
-                return;
+                AdjustmentsWorker.RunWorkerAsync(arguments);
             }
-
-            MainImage.Source = ContrastAdjustment.apply((BitmapSource)OriginalSource, e.NewValue);
         }
     }
 }

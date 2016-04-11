@@ -10,7 +10,7 @@ namespace HisViewer
             ushort[] pixels = new ushort[source.PixelWidth * source.PixelHeight];
             source.CopyPixels(pixels, source.PixelWidth * 2, 0);
 
-            double threshold = Math.Pow((1 + adjustmentVector) / 1, 2);
+            double threshold = Math.Pow((100 + adjustmentVector) / 100, 2);
             double max = ushort.MaxValue;
 
             for (var i = 0; i < pixels.Length; i++)

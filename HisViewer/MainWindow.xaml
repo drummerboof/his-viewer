@@ -11,13 +11,19 @@
             <RowDefinition Height="24" />
             <RowDefinition Height="*" />
             <RowDefinition Height="72" />
+            <RowDefinition Height="24" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Name="MainMenu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1,0,0">
-            <MenuItem Header="File">
+        <Menu Grid.Row="0" Name="MainMenu" Margin="0,0,0,0" BorderBrush="#FFC5C5C5" BorderThickness="0,0,0,1">
+            <MenuItem Header="File" Height="24">
                 <MenuItem x:Name="Open" Header="Open..." Click="HandleOpenClick" />
             </MenuItem>
         </Menu>
-        <Image Grid.Row="1" Name="MainImage" Stretch="Uniform" MinHeight="256"/>
-        <Slider Grid.Row="2" Name="Contrast" Width="200" Minimum="-1" Maximum="1" Value="0" LargeChange="0.1" VerticalAlignment="Center" ToolTip="Contrast" ValueChanged="HandleContrastChange" IsMoveToPointEnabled="True" />
+        <Border x:Name="MainImageBorder" Visibility="Hidden" Grid.Row="1" BorderThickness="1" BorderBrush="#FFC5C5C5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+            <Image Name="MainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform"/>
+        </Border>
+        <Slider Grid.Row="2" Name="Contrast" Width="200" Minimum="-100" Maximum="100" Value="0" VerticalAlignment="Center" ToolTip="Contrast" ValueChanged="HandleContrastChange" IsMoveToPointEnabled="True" />
+        <StatusBar x:Name="StatusBar" Height="24" Margin="0,0,0,0" Grid.Row="3" VerticalAlignment="Top" BorderThickness="0,1,0,0" BorderBrush="#FFC5C5C5">
+            <TextBlock x:Name="FileName"><Run Text="Open file to "/><Run Text="b"/><Run Text="egin..."/></TextBlock>
+        </StatusBar>
     </Grid>
 </Window>
