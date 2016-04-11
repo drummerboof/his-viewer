@@ -41,6 +41,7 @@ namespace HisViewer
                 try
                 {
                     this.MainImage.Source = parser.parseImageFile(info);
+                    this.Title = String.Format("His Viewer: {0}", info.Name);
                 }
                 catch (Exception ex)
                 {
