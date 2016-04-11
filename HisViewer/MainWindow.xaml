@@ -18,5 +18,6 @@
             </MenuItem>
         </Menu>
         <Image Grid.Row="1" Name="MainImage" Stretch="Uniform" MinHeight="256"/>
+        <Slider Grid.Row="2" Name="Contrast" Width="200" Minimum="-1" Maximum="1" Value="0" LargeChange="0.1" VerticalAlignment="Center" ToolTip="Contrast" ValueChanged="HandleContrastChange" IsMoveToPointEnabled="True" />
     </Grid>
 </Window>

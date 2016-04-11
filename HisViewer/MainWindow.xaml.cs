@@ -23,6 +23,9 @@ namespace HisViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        ImageAdjustmentInterface ContrastAdjustment = new ContrastImageAdjustment();
+        ImageSource OriginalSource;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,14 +43,25 @@ namespace HisViewer
 
                 try
                 {
-                    this.MainImage.Source = parser.parseImageFile(info);
-                    this.Title = String.Format("His Viewer: {0}", info.Name);
+                    MainImage.Source = parser.parseImageFile(info);
+                    OriginalSource = MainImage.Source.Clone();
+                    Title = String.Format("His Viewer: {0}", info.Name);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error reading file", MessageBoxButton.OK);
                 }
             }
+        }
+
+        private void HandleContrastChange(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (OriginalSource == null)
+            {
+                return;
+            }
+
+            MainImage.Source = ContrastAdjustment.apply((BitmapSource)OriginalSource, e.NewValue);
         }
     }
 }
